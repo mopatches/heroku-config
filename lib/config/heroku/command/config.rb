@@ -21,9 +21,6 @@ class Heroku::Command::Config
 
     config = merge_config(remote_config, local_config, interactive, overwrite)
     write_local_config config
-    unless quiet || !STDOUT.tty?
-      display "Config for #{app} written to #{local_config_filename}"
-    end
   end
 
   # config:push
@@ -52,7 +49,7 @@ class Heroku::Command::Config
 private ######################################################################
 
   def local_config
-    config_data = (STDIN.tty?) ? File.read(local_config_filename) : STDIN.read
+    config_data = File.read(local_config_filename)
     config_data.split("\n").inject({}) do |hash, line|
       # Regexp removes leading " from value
       if line =~ /\A([A-Za-z0-9_]+)="?(.*)\z/
@@ -70,7 +67,7 @@ private ######################################################################
   end
 
   def local_config_filename
-    filename = (STDIN.tty?) ? '.env' : 'STDIN'
+    filename = '.env'
     @local_config_filename ||= options[:env] || filename
   end
 
@@ -84,12 +81,8 @@ private ######################################################################
       keys += "#{key}=#{config[key].inspect}\n"
     end
 
-    if STDOUT.tty?
-      File.open(local_config_filename, "w") do |file|
-        file.puts keys
-      end
-    else
-      puts keys
+    File.open(local_config_filename, "w") do |file|
+      file.puts keys
     end
   end
 
