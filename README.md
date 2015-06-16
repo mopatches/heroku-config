@@ -6,7 +6,7 @@ Provides a way for you to push/pull your Heroku environment to use locally.
 
 Add the heroku gem plugin:
 
-    $ heroku plugins:install git://github.com/ddollar/heroku-config.git
+    $ heroku plugins:install git://github.com/mopatches/heroku-config.git
     heroku-config installed
 
 Add the following to `.gitignore`:
